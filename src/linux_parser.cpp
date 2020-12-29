@@ -397,6 +397,7 @@ long LinuxParser::UpTime(int pid) {
   string key[22];
   string value;
   long int uptime = 0;
+  long starttime = 0;
   string proc_id = std::to_string(pid);
   
   std::ifstream filestream(kProcDirectory + proc_id + kStatFilename);
@@ -411,6 +412,6 @@ long LinuxParser::UpTime(int pid) {
     }
  
   if (key[21] != "")
-    uptime = std::stol(key[21]) / sysconf(_SC_CLK_TCK);
-  
+    starttime = std::stol(key[21]);
+  uptime = UpTime() - (starttime / sysconf(_SC_CLK_TCK));
   return uptime; }
